@@ -3,7 +3,7 @@ import 'themes/color.dart';
 import 'views/login_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Poppins',
-        primaryColor: Colors.white,
+        primaryColor: MyTheme.lightGray,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             primary: MyTheme.blue,
