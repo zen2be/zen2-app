@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zen2app/views/home_page.dart';
 import 'themes/color.dart';
 import 'views/login_page.dart';
+import 'globals.dart' as globals;
 
-void main() {
+Future<void> main() async {
+  await dotenv.load();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  globals.status = prefs.getBool('isLoggedIn') ?? false;
+  print(prefs.getBool('isLoggedIn'));
   runApp(const MyApp());
 }
 
@@ -15,7 +23,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Poppins',
-        primaryColor: MyTheme.lightGray,
+        appBarTheme: const AppBarTheme(
+            iconTheme: IconThemeData(
+              color: MyTheme.black,
+            ),
+            color: MyTheme.lightGray,
+            titleTextStyle: TextStyle(
+                color: MyTheme.blue, fontWeight: FontWeight.bold, fontSize: 20),
+            toolbarTextStyle: TextStyle(color: MyTheme.black)),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             primary: MyTheme.blue,
@@ -29,7 +44,11 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const LoginPage(),
+      home: globals.status == false ? const LoginPage() : const HomePage(),
+      routes: <String, WidgetBuilder>{
+        '/home': (BuildContext context) => const HomePage(),
+        '/login': (BuildContext context) => const LoginPage(),
+      },
     );
   }
 }

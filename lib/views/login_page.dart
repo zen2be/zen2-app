@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../themes/color.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -24,6 +26,8 @@ class _LoginPageState extends State<LoginPage> {
   final unValidRoleSnackBar = const SnackBar(
       content: Text('This app is only for specialists or admins'));
   final storage = const FlutterSecureStorage();
+
+  final String apiUrl = dotenv.get('API_URL', fallback: 'NOT FOUND');
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +65,10 @@ class _LoginPageState extends State<LoginPage> {
         child: ElevatedButton(
             child: const Text('Login'),
             onPressed: () async {
+              debugPrint(apiUrl);
               if (EmailValidator.validate(emailController.text)) {
                 // email valid
-                var result = await http.post(
-                    Uri.parse('http://192.168.0.7:3000/auth/login'),
+                var result = await http.post(Uri.parse(apiUrl + '/auth/login'),
                     headers: {
                       'Content-Type': 'application/json',
                       'Accept': 'application/json'
@@ -78,28 +82,33 @@ class _LoginPageState extends State<LoginPage> {
                   Map<String, dynamic> body = jsonDecode(result.body);
                   await storage.write(
                       key: 'accessToken', value: body['access_token']);
+                  await storage.write(
+                      key: 'refreshToken', value: body['refresh_token']);
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  await prefs.setBool("isLoggedIn", true);
                   String? accessToken = await storage.read(key: 'accessToken');
                   if (accessToken != null) {
                     // check if specialist or admin
-                    var profileRes = await http.get(
-                        Uri.parse('http://192.168.0.7:3000/auth/profile'),
-                        headers: {
-                          'Content-Type': 'application/json',
-                          'Accept': 'application/json',
-                          'Authorization': 'Bearer ' + accessToken
-                        });
+                    var profileRes = await http
+                        .get(Uri.parse(apiUrl + '/auth/profile'), headers: {
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json',
+                      'Authorization': 'Bearer ' + accessToken
+                    });
                     Map<String, dynamic> profile = jsonDecode(profileRes.body);
                     var role = profile['role'];
                     if (role == 'patient') {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(unValidRoleSnackBar);
                       await storage.delete(key: 'accessToken');
+                      await storage.delete(key: 'refreshToken');
+                      await prefs.remove('isLoggedIn');
                     } else {
                       // redirect to home
-                      Navigator.push(
+                      Navigator.pushReplacementNamed(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomePage()),
+                        '/home',
                       );
                     }
                   }
@@ -133,12 +142,12 @@ class _LoginPageState extends State<LoginPage> {
         const Text(
           'Welcome to',
           style: TextStyle(
-              color: MyTheme.black, fontSize: 24, fontWeight: FontWeight.bold),
+              color: MyTheme.black, fontSize: 25, fontWeight: FontWeight.bold),
         ),
         const Text(
           'Zen2',
           style: TextStyle(
-              color: MyTheme.blue, fontSize: 24, fontWeight: FontWeight.bold),
+              color: MyTheme.blue, fontSize: 35, fontWeight: FontWeight.bold),
         ),
         Container(
           margin: const EdgeInsets.only(bottom: 80, top: 20),
