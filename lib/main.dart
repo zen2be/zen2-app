@@ -43,7 +43,14 @@ class MyApp extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 15),
           ),
         ),
+        tabBarTheme: const TabBarTheme(
+          labelColor: MyTheme.black,
+          labelStyle: TextStyle(color: MyTheme.black), // color for text
+        ),
       ),
+      builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!),
       home: globals.status == false ? const LoginPage() : const HomePage(),
       routes: <String, WidgetBuilder>{
         '/home': (BuildContext context) => const HomePage(),

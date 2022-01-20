@@ -105,6 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                       await storage.delete(key: 'refreshToken');
                       await prefs.remove('isLoggedIn');
                     } else {
+                      await storage.write(key: 'role', value: role);
                       // redirect to home
                       Navigator.pushReplacementNamed(
                         context,
