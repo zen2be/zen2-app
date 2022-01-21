@@ -36,7 +36,7 @@ class _AddUserState extends State<AddUser> {
             padding: const EdgeInsets.symmetric(horizontal: 40),
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.fromLTRB(0.0, 40.0, 0.0, 10.0),
                 child: TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -54,7 +54,7 @@ class _AddUserState extends State<AddUser> {
                             borderRadius: BorderRadius.circular(10)))),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -72,7 +72,7 @@ class _AddUserState extends State<AddUser> {
                             borderRadius: BorderRadius.circular(10)))),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -90,7 +90,7 @@ class _AddUserState extends State<AddUser> {
                             borderRadius: BorderRadius.circular(10)))),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -100,6 +100,7 @@ class _AddUserState extends State<AddUser> {
                     },
                     controller: passwordController,
                     keyboardType: TextInputType.visiblePassword,
+                    obscureText: true,
                     decoration: InputDecoration(
                         hintText: 'Password',
                         contentPadding: const EdgeInsets.symmetric(
@@ -108,7 +109,7 @@ class _AddUserState extends State<AddUser> {
                             borderRadius: BorderRadius.circular(10)))),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
