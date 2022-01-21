@@ -6,7 +6,7 @@ class Treatment {
   String description;
   int duration;
   int price;
-  int specialistId;
+  int? specialistId;
 
   Treatment(
       {required this.id,
@@ -14,7 +14,7 @@ class Treatment {
       required this.description,
       required this.duration,
       required this.price,
-      required this.specialistId});
+      this.specialistId});
 
   factory Treatment.fromJson(Map<String, dynamic> json) {
     return Treatment(
@@ -24,6 +24,16 @@ class Treatment {
       duration: json['duration'],
       price: json['price'],
       specialistId: json['specialist']['id'],
+    );
+  }
+
+  factory Treatment.fromJsonWithoutspecialist(Map<String, dynamic> json) {
+    return Treatment(
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      duration: json['duration'],
+      price: json['price'],
     );
   }
 }

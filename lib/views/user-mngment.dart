@@ -261,14 +261,14 @@ class _UserMngmentState extends State<UserMngment> {
             }
             return const Center(child: CircularProgressIndicator());
           }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AddUser()));
-        },
-        backgroundColor: MyTheme.yellow,
-        child: const Icon(Icons.person_add),
-      ),
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const AddUser()));
+          },
+          backgroundColor: MyTheme.yellow,
+          icon: const Icon(Icons.person_add),
+          label: const Text('patient')),
     );
   }
 }
